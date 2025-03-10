@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import StoreSection from '@/components/StoreSection';
 import ItemModal from '@/components/ItemModal';
 import WarningBanner from '@/components/WarningBanner';
+import LocaleSelector from '@/components/LocaleSelector';
 import useFortniteStore from '@/hooks/useFortniteStore';
 import { FortniteItem } from '@/utils/types';
 
@@ -42,6 +43,8 @@ const Index = () => {
   return (
     <div className="container px-4 py-8 mx-auto">
       <Header lastUpdated={lastUpdated} />
+      
+      <LocaleSelector />
       
       <WarningBanner />
       
