@@ -1,12 +1,71 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import Header from '@/components/Header';
+import StoreSection from '@/components/StoreSection';
+import ItemModal from '@/components/ItemModal';
+import WarningBanner from '@/components/WarningBanner';
+import useFortniteStore from '@/hooks/useFortniteStore';
+import { FortniteItem } from '@/utils/types';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+  const { sections, isLoading, error, lastUpdated } = useFortniteStore();
+  const [selectedItem, setSelectedItem] = useState<FortniteItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleItemClick = (item: FortniteItem) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="glass-panel p-8 text-center max-w-md">
+          <h1 className="text-2xl font-display mb-4">Something went wrong</h1>
+          <p className="text-gray-300 mb-6">{error}</p>
+          <button 
+            className="btn-fortnite" 
+            onClick={() => window.location.reload()}
+          >
+            Try Again
+          </button>
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="container px-4 py-8 mx-auto">
+      <Header lastUpdated={lastUpdated} />
+      
+      <WarningBanner />
+      
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="space-y-8">
+          {sections.map((section) => (
+            <StoreSection 
+              key={section.name} 
+              section={section} 
+              onItemClick={handleItemClick}
+            />
+          ))}
+        </div>
+      )}
+      
+      {selectedItem && (
+        <ItemModal 
+          item={selectedItem} 
+          isOpen={isModalOpen} 
+          onClose={closeModal} 
+        />
+      )}
     </div>
   );
 };
