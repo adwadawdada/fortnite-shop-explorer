@@ -51,6 +51,11 @@ const ItemModal = ({ item, onClose, isOpen }: ItemModalProps) => {
   // Extract additional items
   const additionalItems = item.granted ? item.granted.slice(1) : [];
   
+  // For display, only show first 10 items if there are more
+  const displayItems = additionalItems.slice(0, 10);
+  const remainingItemsCount = additionalItems.length - 10;
+  const hasMoreItems = remainingItemsCount > 0;
+  
   return (
     <div 
       className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 md:p-6"
@@ -117,7 +122,7 @@ const ItemModal = ({ item, onClose, isOpen }: ItemModalProps) => {
                 </h3>
                 
                 <div className="space-y-2">
-                  {additionalItems.map(bundleItem => (
+                  {displayItems.map(bundleItem => (
                     <div key={bundleItem.id} className="flex items-center gap-3">
                       <img 
                         src={bundleItem.images.icon}
@@ -130,6 +135,12 @@ const ItemModal = ({ item, onClose, isOpen }: ItemModalProps) => {
                       </div>
                     </div>
                   ))}
+                  
+                  {hasMoreItems && (
+                    <div className="text-sm font-medium text-gray-400 mt-2 pl-2">
+                      and {remainingItemsCount} more {remainingItemsCount === 1 ? 'item' : 'items'}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
