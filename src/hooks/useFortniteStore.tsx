@@ -36,7 +36,11 @@ const useFortniteStore = () => {
 
         setShopData(data);
         setLastUpdated(data.lastUpdate?.date || '');
-        organizeIntoSections(data.shop);
+        
+        // Filter items where giftAllowed = true before organizing into sections
+        const giftableItems = data.shop.filter(item => item.giftAllowed === true);
+        organizeIntoSections(giftableItems);
+        
         setIsLoading(false);
       } catch (err) {
         console.error('Error fetching Fortnite shop data:', err);
